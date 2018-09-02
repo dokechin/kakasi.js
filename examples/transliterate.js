@@ -10,7 +10,7 @@
     var kk = new Kakasi({
         debug: false
     });
-    kk.transliterate( "西沢田" )
+    kk.transliterate( "歌舞伎町" )
     .then(results => {
         console.log("----------\n%s\n----------",results);
     })
