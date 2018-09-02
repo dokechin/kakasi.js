@@ -8,6 +8,8 @@
     var fs = require('fs'),
         resolve = require('path').resolve,
         spawn = require('child_process').spawn;
+        const nihongo = require("nihongo");
+        const moji = require("moji");
 
     /*
     * Recursively merge properties of two objects 
@@ -73,6 +75,20 @@
             mergeRecursive(this._options, options);
         }//Kakasi
 
+        function allPossibleCases(arr) {
+            if (arr.length == 1) {
+                return arr[0];
+            } else {
+                var result = [];
+                var allCasesOfRest = allPossibleCases(arr.slice(1));  // recur with the rest of array
+                for (var i = 0; i < allCasesOfRest.length; i++) {
+                    for (var j = 0; j < arr[0].length; j++) {
+                        result.push(arr[0][j] + allCasesOfRest[i]);
+                    }
+                }
+                return result;
+            }
+        }
         /**
          * Transliterate Japanese
          */
@@ -82,20 +98,29 @@
                 
                 var args;
                 args = [
-                    '-i',
-                    'euc',
-                    '-Ha',
-                    '-Ka',
-                    '-Ja',
-                    '-Ea',
-                    '-ka',
-                    '-s',
+                    '-y',
+                    '-JK',
                     '-iutf8',
                     '-outf8'
                 ];
                 var kakasi = spawn(self._options.bin, args, {});
+                var kanji = [];
+                for(var i=0; i<data.length; i++){
+                    var letter = data.charAt(i);
+                    if (nihongo.isKanji(letter)){
+                        kanji.push(letter);
+                    }
+                    else if (nihongo.isKatakana(letter)){
+                        data = data.slice(0,i) + moji(letter).convert('KK', 'HG').toString() + data.slice(i+1);
+                    }
+                }
+                var src = '';
+                kanji.forEach(function(element) {
+                    src = src + element + " ";
+                });
+                
                 args = [
-                    data
+                    src
                 ];
                 var echo = spawn('echo', args, {});
 
@@ -106,7 +131,23 @@
                     res+=data;
                 });
                 kakasi.stdout.on('end', function(_) {
-                    return resolve(res);
+                    var result = res.match(/\{.+?\}/g);
+                    result = result.map(e => e.slice(1,e.length-1).split("|"));
+
+                    var yomi = [];
+                    var j=0;
+                    for(var i=0; i<data.length; i++){
+                        var letter = data.charAt(i);
+                        if (nihongo.isKanji(letter)){
+                            yomi.push(result[j++]);
+                        }
+                        else {
+                            yomi.push(data.charAt(i));
+                        }
+                    }
+                    const r = allPossibleCases(yomi);
+
+                    return resolve(r);
                 });
                 kakasi.on('error', function(error) {
                     return reject(error);
