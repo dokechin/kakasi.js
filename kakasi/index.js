@@ -132,7 +132,10 @@
                 });
                 kakasi.stdout.on('end', function(_) {
                     var result = res.match(/\:.+?\]/g);
-                    console.log(res)
+
+                    if (result == null){
+                        return null;
+                    }
 
                     result = result.map(e => {
                         e = e.slice(1, e.length-1);
@@ -143,8 +146,6 @@
                         }
                     });
 
-                    console.log(result)
-
                     var yomi = [];
                     var j=0;
                     for(var i=0; i<data.length; i++){
@@ -153,7 +154,9 @@
                             yomi.push(result[j++]);
                         }
                         else {
-                            yomi.push(data.charAt(i));
+                            if (data.charAt(i) != '　') {
+                                yomi.push(data.charAt(i));
+                            }
                         }
                     }
                     const r = allPossibleCases(yomi);
