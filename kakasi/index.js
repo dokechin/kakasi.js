@@ -131,8 +131,19 @@
                     res+=data;
                 });
                 kakasi.stdout.on('end', function(_) {
-                    var result = res.match(/\{.+?\}/g);
-                    result = result.map(e => e.slice(1,e.length-1).split("|"));
+                    var result = res.match(/\:.+?\]/g);
+                    console.log(res)
+
+                    result = result.map(e => {
+                        e = e.slice(1, e.length-1);
+                        if (e.startsWith('{')){
+                            return e.slice(1,e.length-1).split("|");
+                        } else {
+                            return [e];
+                        }
+                    });
+
+                    console.log(result)
 
                     var yomi = [];
                     var j=0;
