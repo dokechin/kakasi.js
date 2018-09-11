@@ -131,20 +131,20 @@
                     res+=data;
                 });
                 kakasi.stdout.on('end', function(_) {
-                    var result = res.match(/\:.+?\]/g);
+                    var result = res.match(/\:.*?\]/g);
 
-                    if (result == null){
-                        return null;
+                    if (result == null ) {
+                         result = [''];
+                    } else {
+                        result = result.map(e => {
+                            e = e.slice(1, e.length-1);
+                            if (e.startsWith('{')){
+                                return e.slice(1,e.length-1).split("|");
+                            } else {
+                                return [e];
+                            }
+                        });
                     }
-
-                    result = result.map(e => {
-                        e = e.slice(1, e.length-1);
-                        if (e.startsWith('{')){
-                            return e.slice(1,e.length-1).split("|");
-                        } else {
-                            return [e];
-                        }
-                    });
 
                     var yomi = [];
                     var j=0;
@@ -159,6 +159,7 @@
                             }
                         }
                     }
+
                     const r = allPossibleCases(yomi);
 
                     return resolve(r);

@@ -10,14 +10,15 @@
     var kk = new Kakasi({
         debug: false
     });
-    kk.transliterate( "常盤台" )
+
+    kk.transliterate( "鶇巣町常盤" )
     .then(results => {
         console.log("----------\n%s\n----------",results);
     })
     .catch(error => {
         console.error(error);
     });
-    
+
     })();
     
     
