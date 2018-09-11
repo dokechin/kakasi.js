@@ -1,36 +1,39 @@
 {
-    "name": "kakasi.js",
-    "description": "Node.js Kakasi",  
-    "version": "1.0.0",
-    "homepage": "https://github.com/loretoparisi/fasttext.js/wiki/FastText.js",
-    "author": {
-      "name": "Loreto Parisi",
-      "email": "loretoparisi@gmail.com"
-    },
-    "contributors": [
-    ],
-    "repository": {
-      "type": "git",
-      "url": "git@github.com:loretoparisi/kakasi.js.git"
-    },
-    "bugs": {
-      "url": "https://github.com/loretoparisi/kakasi.js/issues"
-    },
-    "licenses": [
-      {
-        "type": "MIT",
-        "url": "https://github.com/loretoparisi/kakasi.js/blob/master/LICENSE"
-      }
-    ],
-    "main": "lib/index",
-    "engines": {
-      "node": "*"
-    },
-    "scripts": {
-    },
-    "devDependencies": {},
-    "keywords": [],
-    "dependencies": {
+  "name": "kakasi.js",
+  "description": "Node.js Kakasi",
+  "version": "1.0.0",
+  "homepage": "https://github.com/loretoparisi/fasttext.js/wiki/FastText.js",
+  "author": {
+    "name": "Loreto Parisi",
+    "email": "loretoparisi@gmail.com"
+  },
+  "contributors": [],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:loretoparisi/kakasi.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/loretoparisi/kakasi.js/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/loretoparisi/kakasi.js/blob/master/LICENSE"
     }
+  ],
+  "main": "lib/index",
+  "engines": {
+    "node": "*"
+  },
+  "scripts": {
+    "test": "ava --verbose"
+  },
+  "devDependencies": {
+    "ava": "1.0.0-beta.8"
+  },
+  "keywords": [],
+  "dependencies": {
+    "moji": "^0.5.1",
+    "nihongo": "^1.0.1"
   }
-  
+}
