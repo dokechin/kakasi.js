@@ -158,7 +158,7 @@
                                 if (data.charAt(i) == 'け') {
                                     yomi.push(['け', 'が']);
                                 } else {
-                                    yomi.push(data.charAt(i));
+                                    yomi.push([data.charAt(i),'']);
                                 }
                             }
                         }

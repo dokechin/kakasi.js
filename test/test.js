@@ -25,3 +25,20 @@ test('ケの変換', async t => {
     })
 })
 
+test('通り', async t => {
+  await kk.transliterate('通り').then(function (res){
+    var result = new Set(res);
+    t.deepEqual(result.size, 11);
+    t.true(result.has('とおりり'));  
+    t.true(result.has('つうり'));
+    t.true(result.has('とうり'));  
+    t.true(result.has('みちり'));
+    t.true(result.has('とおり'));
+    t.true(result.has('どおりり'));
+    t.true(result.has('つう'));
+    t.true(result.has('とう'));  
+    t.true(result.has('みち'));
+    t.true(result.has('とお'));
+    t.true(result.has('どおり'));
+  })
+})
