@@ -157,7 +157,15 @@
                             if (data.charAt(i) != '　') {
                                 if (data.charAt(i) == 'け') {
                                     yomi.push(['け', 'が']);
-                                } else {
+                                }
+                                else if (data.charAt(i) == '々') {
+                                    var y = [];
+                                    yomi.pop().forEach( function (e){
+                                        y.push( e + e);
+                                    });
+                                    yomi.push(y);
+                                }
+                                else {
                                     yomi.push([data.charAt(i),'']);
                                 }
                             }

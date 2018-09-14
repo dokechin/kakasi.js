@@ -42,3 +42,27 @@ test('通り', async t => {
     t.true(result.has('どおり'));
   })
 })
+
+/** 
+test('園', async t => {
+  await kk.transliterate('園').then(function (res){
+    var result = new Set(res);
+    t.deepEqual(result.size, 4);
+    t.true(result.has('その'));  
+    t.true(result.has('ぞの'));
+    t.true(result.has('えん'));  
+    t.true(result.has('おん'));
+  })
+})
+*/
+
+test('代々', async t => {
+  await kk.transliterate('代々').then(function (res){
+    var result = new Set(res);
+    t.deepEqual(result.size, 4);
+    t.true(result.has('よよ'));  
+    t.true(result.has('だいだい'));
+    t.true(result.has('しろしろ'));
+    t.true(result.has('よよ'));
+  })
+})
