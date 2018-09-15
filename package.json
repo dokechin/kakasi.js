@@ -33,6 +33,7 @@
   },
   "keywords": [],
   "dependencies": {
+    "array-flatten": "^2.1.1",
     "moji": "^0.5.1",
     "nihongo": "^1.0.1"
   }

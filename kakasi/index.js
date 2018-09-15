@@ -8,6 +8,7 @@
     var fs = require('fs'),
         resolve = require('path').resolve,
         spawn = require('child_process').spawn;
+        flatten = require('array-flatten');
         const nihongo = require("nihongo");
         const moji = require("moji");
 
@@ -74,6 +75,84 @@
             };
             mergeRecursive(this._options, options);
         }//Kakasi
+
+        function dakunize(w) {
+            if (w == '') return '';
+            var t = '';
+            var e = [];
+            for( var i=0; i< w.length;i++){
+                var t = '';
+                const f = w.charAt(i);
+                switch (w.charAt(i)){
+                    case 'か':
+                        t = 'が'
+                        break;
+                    case 'き':
+                        t = 'ぎ'
+                        break;
+                    case 'く':
+                        t = 'ぐ'
+                        break;
+                    case 'け':
+                        t = 'げ'
+                        break;
+                    case 'こ':
+                        t = 'ご'
+                        break;
+                    case 'さ':
+                        t = 'ざ'
+                        break;
+                    case 'し':
+                        t = 'じ'
+                        break;
+                    case 'す':
+                        t = 'ず'
+                        break;
+                    case 'せ':
+                        t = 'ぜ'
+                        break;
+                    case 'そ':
+                        t = 'ぞ'
+                        break;
+                    case 'た':
+                        t = 'だ'
+                        break;
+                    case 'ち':
+                        t = 'ぢ'
+                        break;
+                    case 'つ':
+                        t = 'づ'
+                        break;
+                    case 'て':
+                        t = 'で'
+                        break;
+                    case 'と':
+                        t = 'ど'
+                        break;
+                    case 'は':
+                        t = 'ば'
+                        break;
+                    case 'ひ':
+                        t = 'び'
+                        break;
+                    case 'ふ':
+                        t = 'ぶ'
+                        break;
+                    case 'へ':
+                        t = 'べ'
+                        break;
+                    case 'ほ':
+                        t = 'ぼ'
+                        break;
+                }
+                if (t != '') {
+                    e.push([f, t]);
+                } else {
+                    e.push(f);
+                }
+            }
+            return allPossibleCases(e);
+        }
 
         function allPossibleCases(arr) {
             if (arr.length == 1) {
@@ -171,8 +250,22 @@
                             }
                         }
                     }
+                    var daku = [];
 
-                    const r = allPossibleCases(yomi);
+                    yomi.forEach( function (y){
+                        var d = y.map( w => dakunize(w));
+
+                        var a = new Set(y);
+                        d = flatten(d);
+                        d.forEach(function(e){
+                            a.add(e);
+                        });
+
+                        daku.push([...a]);
+
+                    });
+
+                    const r = allPossibleCases(daku);
 
                     return resolve(r);
                 });
