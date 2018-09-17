@@ -81,72 +81,73 @@
             var t = '';
             var e = [];
             for( var i=0; i< w.length;i++){
-                var t = '';
+                var t = [];
                 const f = w.charAt(i);
                 switch (w.charAt(i)){
                     case 'か':
-                        t = 'が'
+                        t.push('が');
                         break;
                     case 'き':
-                        t = 'ぎ'
+                        t.push('ぎ')
                         break;
                     case 'く':
-                        t = 'ぐ'
+                        t.push('ぐ')
                         break;
                     case 'け':
-                        t = 'げ'
+                        t.push('げ')
                         break;
                     case 'こ':
-                        t = 'ご'
+                        t.push('ご')
                         break;
                     case 'さ':
-                        t = 'ざ'
+                        t.push('ざ')
                         break;
                     case 'し':
-                        t = 'じ'
+                        t.push('じ')
                         break;
                     case 'す':
-                        t = 'ず'
+                        t.push('ず')
                         break;
                     case 'せ':
-                        t = 'ぜ'
+                        t.push('ぜ')
                         break;
                     case 'そ':
-                        t = 'ぞ'
+                        t.push('ぞ')
                         break;
                     case 'た':
-                        t = 'だ'
+                        t.push('だ')
                         break;
                     case 'ち':
-                        t = 'ぢ'
-                        break;
+                        t.push('ぢ')
+                       break;
                     case 'つ':
-                        t = 'づ'
-                        break;
+                        t.push('づ')
+                        t.push('っ')
+                       break;
                     case 'て':
-                        t = 'で'
+                        t.push('で')
                         break;
                     case 'と':
-                        t = 'ど'
+                        t.push('ど')
                         break;
                     case 'は':
-                        t = 'ば'
+                        t.push('ば')
                         break;
                     case 'ひ':
-                        t = 'び'
+                        t.push('び')
                         break;
                     case 'ふ':
-                        t = 'ぶ'
+                        t.push('ぶ')
                         break;
                     case 'へ':
-                        t = 'べ'
+                        t.push('べ')
                         break;
                     case 'ほ':
-                        t = 'ぼ'
+                        t.push('ぼ')
                         break;
                 }
-                if (t != '') {
-                    e.push([f, t]);
+                if (t.length > 0) {
+                    e.push(flatten([f, t]));
                 } else {
                     e.push(f);
                 }
@@ -201,6 +202,7 @@
                 args = [
                     src
                 ];
+
                 var echo = spawn('echo', args, {});
 
                 echo.stdout.pipe( kakasi.stdin );
@@ -251,6 +253,7 @@
                         }
                     }
                     var daku = [];
+                    var cnt = 0;
 
                     yomi.forEach( function (y){
                         var d = y.map( w => dakunize(w));
@@ -261,22 +264,74 @@
                             a.add(e);
                         });
 
+                        cnt = (cnt == 0) ? a.size : cnt * a.size;
+
                         daku.push([...a]);
 
                     });
 
+                    if (cnt > 40000000) {
+                        return reject("pattern over" + cnt );
+                    }
+                    
                     const r = allPossibleCases(daku);
 
-                    return resolve(r);
+                    resolve(r);
                 });
                 kakasi.on('error', function(error) {
-                    return reject(error);
+                    reject(error);
                 });
 
                 if (self._options.debug) kakasi.stdout.pipe(process.stdout);
 
             });
         }//transliterate
+
+
+        /**
+         * 読み Japanese
+         */
+        Kakasi.prototype.read = function (data) {
+            var self = this;
+            return new Promise(function (resolve, reject) {
+                
+                var args;
+                args = [
+                    '-JH',
+                    '-iutf8',
+                    '-outf8'
+                ];
+                var kakasi = spawn(self._options.bin, args, {});
+                
+                args = [
+                    data
+                ];
+
+                var echo = spawn('echo', args, {});
+
+                echo.stdout.pipe( kakasi.stdin );
+                var res='';
+                kakasi.stdout.on('data', function(_data) {
+                    var data=new Buffer(_data,'utf-8').toString();
+                    res+=data;
+                });
+                kakasi.stdout.on('end', function(_) {
+
+                    var yomi = '';
+                    if (res == null ) {
+                        resolve(['']);
+                    }
+                    var h = moji(res.trim()).convert('KK', 'HG').toString()
+                    resolve([h]);
+                });
+                kakasi.on('error', function(error) {
+                    reject(error);
+                });
+
+                if (self._options.debug) kakasi.stdout.pipe(process.stdout);
+
+            });
+        }//read
 
         return Kakasi;
 

@@ -8,7 +8,8 @@ var kk = new Kakasi({
 test('単一読み単語', async t => {
     await kk.transliterate('常盤').then(function (res){
       var result = new Set(res);
-      t.deepEqual(result.size, 11);
+      t.deepEqual(result.size, 12);
+      t.true(result.has('っねばん'));  
       t.true(result.has('つねばん'));  
       t.true(result.has('づねばん'));  
       t.true(result.has('じょうばん'));  
@@ -36,10 +37,11 @@ test('ケの変換', async t => {
 test('通り', async t => {
   await kk.transliterate('通り').then(function (res){
     var result = new Set(res);
-    t.deepEqual(result.size, 18);
+    t.deepEqual(result.size, 20);
     t.true(result.has('とおりり'));  
     t.true(result.has('どおりり'));  
     t.true(result.has('つうり'));
+    t.true(result.has('っうり'));
     t.true(result.has('づうり'));
     t.true(result.has('とうり'));  
     t.true(result.has('どうり'));  
@@ -47,6 +49,7 @@ test('通り', async t => {
     t.true(result.has('みぢり'));
     t.true(result.has('とおり'));
     t.true(result.has('どおり'));
+    t.true(result.has('っう'));
     t.true(result.has('つう'));
     t.true(result.has('づう'));
     t.true(result.has('とう'));  
@@ -84,3 +87,12 @@ test('代々', async t => {
     t.true(result.has('じろじろ'));
   })
 })
+
+test('清水', async t => {
+  await kk.read('清水').then(function (res){
+    var result = new Set(res);
+    t.deepEqual(result.size, 1);
+    t.true(result.has('しみず'));
+  })
+})
+
