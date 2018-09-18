@@ -317,12 +317,23 @@
                 });
                 kakasi.stdout.on('end', function(_) {
 
-                    var yomi = '';
                     if (res == null ) {
                         resolve(['']);
                     }
+
+                    var yomi = [];
+
                     var h = moji(res.trim()).convert('KK', 'HG').toString()
-                    resolve([h]);
+
+                    yomi.push(h);
+
+                    if (h.endsWith('ちょう')) {
+                        yomi.push(h.substr(0, h.length-3) + 'まち');
+                    } else if (h.endsWith('まち')) {
+                        yomi.push(h.substr(0, h.length-2) + 'ちょう');
+                    }
+ 
+                    resolve(yomi);
                 });
                 kakasi.on('error', function(error) {
                     reject(error);

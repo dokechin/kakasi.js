@@ -88,11 +88,20 @@ test('代々', async t => {
   })
 })
 
-test('清水', async t => {
-  await kk.read('清水').then(function (res){
+test('清水町', async t => {
+  await kk.read('清水町').then(function (res){
     var result = new Set(res);
-    t.deepEqual(result.size, 1);
-    t.true(result.has('しみず'));
+    t.deepEqual(result.size, 2);
+    t.true(result.has('しみずちょう'));
+    t.true(result.has('しみずまち'));
   })
 })
 
+test('相生町', async t => {
+  await kk.read('相生町').then(function (res){
+    var result = new Set(res);
+    t.deepEqual(result.size, 2);
+    t.true(result.has('あいおいちょう'));
+    t.true(result.has('あいおいまち'));
+  })
+})
