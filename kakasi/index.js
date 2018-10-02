@@ -247,7 +247,7 @@
                                     yomi.push(y);
                                 }
                                 else {
-                                    yomi.push([data.charAt(i),'']);
+                                    yomi.push([data.charAt(i)]);
                                 }
                             }
                         }
